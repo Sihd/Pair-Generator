@@ -133,6 +133,36 @@ namespace Pair_Generator
             //use modulus opperator on n to quickly and easy remove the 
             n = n % digits[index];
         }
-            
+         
+        
+        //set digit at index to d   
+        public void setDigit(int d, int index)
+        {
+            if (d > 10 || d < 0)//check if d is less than 10 and not negative
+                throw new ArgumentException("Argument 'd' in setDigit too big or negative: " + d);
+            if (index < 0)//make sure index is positive
+                throw new ArgumentException("Argument 'index' in setDigit() is negative: " + index);
+
+            if (index > (n.ToString().Length - 1))//check if this can be handled by addDigit()
+                addDigit(d, index);//if so call addDigit()
+
+            //get digit at index if index < n.length
+            int digit = int.Parse(n.ToString()[d].ToString());
+
+            if (d > 0)//check if value to be set is not 0
+                d = d - digit; // if it is not 0 get multiplier to apply
+            else if (d == 0)//if the value the caller wants to add is 0
+                d = -digit;//set multiplier to negative value of digit
+
+            //if d == 9 and digit == 6 then d gets assigned 9 - 6 = 3, so 3 gets added to 6 setting digit to 9
+            //if d == 6 and digit == 9 then d gets assigned 6 - 9 = -3, so -3 gets added to 9 setting digit to 6
+            //if d == 0 and digit == 6 then d gets assigned -6, so -6 gets added to 6 setting digit to 0
+
+            if (index == 0)//if setting the ones digit
+                n = d;//just set n to d
+            else //otherwise set digit at index to d
+                n += d * digits[index - 1];
+
+        }
     }
 }
