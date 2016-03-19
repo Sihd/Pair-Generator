@@ -47,6 +47,12 @@ namespace Pair_Generator
                 increaseDigits(num.Length);//if not call increaseDigits to fix it
         }
 
+        public Number(Number num)
+        {
+            //n = num.n;
+            n = new BigInteger(num.n.ToByteArray());
+        }
+
         
         //set up accessors to n
         public BigInteger value
