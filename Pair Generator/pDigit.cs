@@ -10,6 +10,7 @@ namespace Pair_Generator
     internal class pDigit
     {
         private int[][][] digits; // 2D array to hold digit pairs
+        private int branches; //holds greatest index of first array boundary in digits array
 
         //make default constructor private to prevent use
         private pDigit() { }
@@ -82,6 +83,8 @@ namespace Pair_Generator
                               new int[] { 3,2,1,0,9,8,7,6,5,4 },
                               new int[] { 2,1,0,9,8,7,6,5,4,3 },
                               new int[] { 1,0,9,8,7,6,5,4,3,2 }} };
+
+            branches = 2;
         }
 
         private void setup3()
@@ -108,6 +111,8 @@ namespace Pair_Generator
                              new int[] { 1,4,7,0,3,6,9,2,5,8},
                              new int[] { 4,7,0,3,6,9,2,5,8,1},
                              new int[] { 7,0,3,6,9,2,5,8,1,4} }};
+
+            branches = 1;
         }
 
         private void setup7()
@@ -134,6 +139,8 @@ namespace Pair_Generator
                              new int[] { 9,6,3,0,7,4,1,8,5,2},
                              new int[] { 6,3,0,7,4,1,8,5,2,9},
                              new int[] { 3,0,7,4,1,8,5,2,9,6}}};
+
+            branches = 1;
         }
 
         private void setup9()
@@ -172,6 +179,21 @@ namespace Pair_Generator
                              new int[] { 1,0,9,8,7,6,5,4,3,2},
                              new int[] { 4,3,2,1,0,9,8,7,6,5},
                              new int[] { 7,6,5,4,3,2,1,0,9,8}}};
+
+            branches = 2;
+        }
+
+        public int[] getArray(int branch, int valueAdding)
+        {
+
+            //verify parameters are within acceptable range
+            if (branch < 0 || branch > branches)
+                throw new ArgumentException("branch value passed to pDigit.getArray() is invalid: " + branch);
+            if (valueAdding < 0 || valueAdding > 9)
+                throw new ArgumentException("branch value passed to pDigit.getArray() is invalid: " + valueAdding);
+
+            //return array at given indices
+            return digits[branch][valueAdding];
         }
     }
 }
