@@ -10,6 +10,7 @@ namespace Pair_Generator
     {
         private BigInteger n;//main variable storage
         private static BigInteger[] digits;//array to store 10^n+1 where n is the index in the array
+        private int length;
 
         static Number()//initialize the digits array
         {
@@ -37,6 +38,8 @@ namespace Pair_Generator
         {
             if(num.ToString().Length > (digits.Length + 1))
                 increaseDigits(num.ToString().Length);
+            n = num;
+            length = num.ToString().Length;
         }
 
         public Number(string num)
@@ -64,6 +67,22 @@ namespace Pair_Generator
             }
         }
 
+        public int Length
+        { get
+            { return length;}
+        }
+
+        //return requested value at digit i
+        public int this[int i]
+        {
+            get
+            {
+                if (i < 0 || i >= length)
+                    throw new ArgumentException("indexer value passed to Number class invalid: " + i);
+                string temp = ToString();
+                return int.Parse(temp[length - (i + 1)].ToString());//return digit at index i assuming 1's digit is at 0 index
+            }
+        }
 
         //increase size of the static digits array 
         public static void increaseDigits(int length = -1)
@@ -91,31 +110,37 @@ namespace Pair_Generator
 
 
         //add (d * 10^(index + 1)) to value stored
-        public void addDigit(int d, int index)
+        public void addDigit(int d)
         {
             if(d > 10 || d < 0)
             {
                 throw new ArgumentException("Digit being added to Number is too big or is negative: " + d);
             }
 
+            //increment length variable
+
+
             if (d == 0)//check if digit being added is zero
-                return;//if so then nothing needs to be done so just return            
+            {
+                length++;
+                return;//if so then nothing needs to be done so just return
+            }
+
 
             //set index to get the correct index for next digit to add to n. If n = 543 then n.size == 3 and I want to add a multiple of 1000.
             //digits[3] == 10^(3+1) == 10,000 when I want 1,000
-            //so I want the value of digits[n.size - 1] == digits[2] == 10^(2+1) == 1,000 
-            if(index < n.ToString().Length - 1)
-                index = n.ToString().Length - 1;
+            //so I want the value of digits[n.size - 1] == digits[2] == 10^(2+1) == 1,000
+            //and post-increment length to maintain correct measurement of digits without messing up proper assignment of index
+            int index = length++ - 1;
 
-
-            if(index < 0)//if adding to 1's digit just set n to d and return
+            if(index <= 0)//if adding to 1's digit just set n to d and return
             {
                 n = d;
                 return;
             }
 
 
-            if (index > (digits.Length + 1))//make sure we have the index available in digits array
+            if (length > (digits.Length + 1))//make sure we have the index available in digits array
                 increaseDigits();//if not call default increaseDigits() to double digits array size
 
             //add d * 10^(i + 1) if index == 2 and d == 7 then 7 * 10^(2+1) == 7 * 1,000 == 7,000
@@ -126,18 +151,20 @@ namespace Pair_Generator
         //remove largest digit
         public void removeDigit()
         {
-            //get index of largest digit. if n == 7,543 then n.length == 4. we need the index with the value of 1,000 in digits
-            //digit[2] == 1,000. 4 - 2 = 2. So (n.length - 2) will give us the correct index
-            int index = n.ToString().Length - 2;
+            //if n == 7,543 then length == 4. we need the index with the value of 1,000 in digits
+            //digit[2] == 1,000. 4 - 2 = 2. So (length - 2) will give us the correct index
 
-            if(index < 0)//verify that we are not trying to remove a digit smaller than the 10's digit
+
+            if(length <= 1)//verify that we are not trying to remove a digit smaller than the 10's digit
             {
                 n = 0;//if we are then just set n to 0
+                length = 0;//reset length counter
                 return; //and return
             }
 
             //use modulus opperator on n to quickly and easy remove the 
-            n = n % digits[index];
+            n = n % digits[length - 2];
+            length--;//decrement length counter
         }
          
         
@@ -170,5 +197,20 @@ namespace Pair_Generator
                 n += d * digits[index - 1];
 
         }
-    }
+
+        public override string ToString()
+        {
+            string temp = n.ToString();
+            if (length > 0)
+                if (length > temp.Length)//if largest digits are 0's they won't be recorded in n.ToString()
+                {//if so then we need to generate those 0's
+                    int i = 10 ^ (length - temp.Length);//if length == 5 and temp.length == 3 then i == 10^2 == 100
+                    temp = i.ToString().Substring(1, length - temp.Length) + temp;//attach all the 0's from i to the front of temp
+                    //if i == 100 then substring of characters from index 1 to 2 is "00"
+                    //if i == 10 then substring of characters from index 1 to 1 is "0"
+                    //if i == 1000 then substring of characters from index 1 to 3 is "000"
+                }
+
+            return temp;//return resulting string
+        }
 }
