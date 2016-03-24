@@ -13,6 +13,7 @@ namespace Pair_Generator
         private Number x, y; //store both roots
         private bool givenx;//are we working from the x(true) root or y(false) root
         private pDigit pd;//local instance of pDigit class
+        private int branch;//store the branch we are working on
 
         //make default constructor private to prevent use
         private pairGenerator() { }
@@ -56,9 +57,9 @@ namespace Pair_Generator
                     givenx = (rootd == '9') ? false : true;//if 1's digit of compNum is 9 and 1's digit of root is 9 we were given the y root
                     //if we were given a root that has any other valid digit in the 1's digit it may be considered the x root
                     break;
-            }
-
+            }         
         }
+        
 
         //generate the opposite pair to the one we were provided
         public void Generate()
@@ -71,6 +72,46 @@ namespace Pair_Generator
                     return;//return from Generate()
 
 
+            }
+        }
+
+        //process digit at indx
+        private void proccessDigit(int indx)
+        {
+            
+            if(givenx)//if we are proccessing a digit when we were given the x digit
+            {
+                if (indx > (x.Length - 1) || indx < 0)//check if indx is within valid ranges
+                    throw new ArgumentException("Index given to pairGenerator.proccessDigit() is invalid: " + indx);//if not give helpful error message
+
+                //calculate the difference between compnum and the product of x and y and store in difNum
+                Number difNum = new Number(compNum - (x.value * y.value));
+                int[] ary = pd.getArray(branch, difNum[indx]);//get array for the amount we need to add
+
+                y.addDigit(x[indx]);//add digit to y at the index in ary associated with the value of the digit in x at position indx
+
+            }
+            else
+            {
+                if (indx > (y.Length - 1) || indx < 0)//check if indx is within valid ranges
+                    throw new ArgumentException("Index given to pairGenerator.proccessDigit() is invalid: " + indx);//if not give helpful error message
+
+                //calculate the difference between compnum and the product of x and y and store in difNum
+                Number difNum = new Number(compNum - (x.value * y.value));
+                int[] ary = pd.getArray(branch, difNum[indx]);//get array for the amount we need to add
+
+                //since the array given from pd.getArray is ordered according to the x digit
+                //we must search for the index of the correct y digit
+
+                int j = y[indx];//get y digit value we are looking for
+                for(int i = 0; i < 10; i++)
+                {
+                    if (ary[i] == j)//check if ary[i] is the y digit we are looking for
+                    {
+                        x.addDigit(i);//if so add index of the y digit in the array ary to x
+                        break;//and break
+                    }
+                }
             }
         }
 
@@ -91,15 +132,19 @@ namespace Pair_Generator
                     {
                         case '1':
                             x = new Number(1);
+                            branch = 0;
                             break;
                         case '3':
                             y = new Number(7);
+                            branch = 1;
                             break;
                         case '7':
                             x = new Number(3);
+                            branch = 1;
                             break;
                         case '9':
                             y = new Number(9);
+                            branch = 2;
                             break;
                     }
                     break;
@@ -108,15 +153,19 @@ namespace Pair_Generator
                     {
                         case '1':
                             y = new Number(3);
+                            branch = 0;
                             break;
                         case '3':
                             x = new Number(1);
+                            branch = 0;
                             break;
                         case '7':
                             y = new Number(9);
+                            branch = 1;
                             break;
                         case '9':
                             x = new Number(7);
+                            branch = 1;
                             break;
                     }
                     break;
@@ -125,15 +174,19 @@ namespace Pair_Generator
                     {
                         case '1':
                             y = new Number(7);
+                            branch = 0;
                             break;
                         case '3':
                             y = new Number(9);
+                            branch = 1;
                             break;
                         case '7':
                             x = new Number(1);
+                            branch = 0;
                             break;
                         case '9':
                             x = new Number(3);
+                            branch = 1;
                             break;
                     }
                     break;
@@ -142,15 +195,19 @@ namespace Pair_Generator
                     {
                         case '1':
                             y = new Number(9);
+                            branch = 0;
                             break;
                         case '3':
                             y = new Number(3);
+                            branch = 1;
                             break;
                         case '7':
                             y = new Number(7);
+                            branch = 2;
                             break;
                         case '9':
                             x = new Number(1);
+                            branch = 0;
                             break;
                     }
                     break;
