@@ -11,6 +11,7 @@ namespace Pair_Generator
         private BigInteger n;//main variable storage
         private static BigInteger[] digits;//array to store 10^n+1 where n is the index in the array
         private int length;
+        private static string zeros;
 
         static Number()//initialize the digits array
         {
@@ -26,6 +27,13 @@ namespace Pair_Generator
                 digits[i] = temp;//assign current value of temp to current index in digits[]
                 temp *= 10;
             }
+
+
+            //set up zeros string for ToString() to use
+            BigInteger tempBI = new BigInteger(10);
+            tempBI = BigInteger.Pow(tempBI, 50);
+            zeros = tempBI.ToString().Substring(1);
+
         }
 
         public Number()
@@ -198,17 +206,26 @@ namespace Pair_Generator
 
         }
 
+
+        //gotta make sure to add 0's to the front of the numbers I will be factoring 
+        //because generating the opposite root of 347 is different than generating the opposite root of 000347
         public override string ToString()
         {
             string temp = n.ToString();
             if (length > 0)
-                if (length > temp.Length)//if largest digits are 0's they won't be recorded in n.ToString()
+                if (length > temp.Length)//if largest digits are 0's they won't be output in BigInteger.ToString()
                 {//if so then we need to generate those 0's
-                    int i = 10 ^ (length - temp.Length);//if length == 5 and temp.length == 3 then i == 10^2 == 100
-                    temp = i.ToString().Substring(1, length - temp.Length) + temp;//attach all the 0's from i to the front of temp
-                    //if i == 100 then substring of characters from index 1 to 2 is "00"
-                    //if i == 10 then substring of characters from index 1 to 1 is "0"
-                    //if i == 1000 then substring of characters from index 1 to 3 is "000"
+
+                    int i = length - temp.Length;//get number of zeros to place in front of current number
+
+                    if (i >= zeros.Length)//if we don't have enough 0's stored in zeros
+                    {
+                        zeros += zeros;//double the amount of zeros we have stored
+                    }
+
+                    //append the correct amount of 0's to the front of temp
+                    temp = zeros.Substring(0, (i - 1)) + temp;
+
                 }
 
             return temp;//return resulting string
