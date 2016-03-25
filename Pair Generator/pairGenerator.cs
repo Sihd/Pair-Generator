@@ -88,24 +88,8 @@ namespace Pair_Generator
         //generate the opposite pair to the one we were provided
         private void Generate(Number root)
         {
-            //if we were given x
-            if(givenx)
-            {
-                setOnes();//call setOnes to instantiate y root with correct 1's digit
-                if (x.Length == 1)//if we were only given a 1 digit long root then return from Generate()
-                    return;//return from Generate()
-
-                //proccess each digit starting with the 10's digit
-                for (int i = 1; i < root.Length; i++)
-                {
-                    addDigit(root[i]);
-                    proccessDigit(i);
-                }
-            }
-            else
-            {
                 setOnes();//call setOnes to instantiate x root with correct 1's digit
-                if (y.Length == 1)//if we were only given a 1 digit long root then return from Generate()
+                if (root.Length == 1)//if we were only given a 1 digit long root then return from Generate()
                     return;//return from Generate()
 
                 //proccess each digit starting with the 10's digit
@@ -114,7 +98,6 @@ namespace Pair_Generator
                     addDigit(root[i]);
                     proccessDigit(i);
                 }
-            }
         }
 
         //process digit at indx
