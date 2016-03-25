@@ -149,7 +149,7 @@ namespace Pair_Generator
             //and post-increment length to maintain correct measurement of digits without messing up proper assignment of index
             int index = length++ - 1;
 
-            if (index <= 0)//if adding to 1's digit just set n to d and return
+            if (index < 0)//if adding to 1's digit just set n to d and return
             {
                 n = d;
                 return;

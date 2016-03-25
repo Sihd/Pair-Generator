@@ -172,7 +172,7 @@ namespace Pair_Generator
             string tempnum = compNum.ToString();//temporarily store compNum as string so we don't create this string more than once
             string temproot = (givenx) ? x.value.ToString() : y.value.ToString();//temporarily store rootNum as string so we don't create this string more than once
             char compd = tempnum[tempnum.Length - 1];//get 1's digit of compNum and store in compd
-            char rootd = temproot[temproot.Length - 1];//get 1's digit of root and store in rootd
+            char rootd = temproot[0];//get 1's digit of root and store in rootd
 
             //use nested switch cases to set up 1's digits of x and y
             switch (compd)
