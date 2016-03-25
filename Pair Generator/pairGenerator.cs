@@ -23,12 +23,12 @@ namespace Pair_Generator
             compNum = composite;//store given composite number to be factored in compNum
             rootGiven(root);//call rootGiven() to figure out if they gave us the x root or y root
             if (givenx)//if they gave us the x root then store root in x
-                x = root;
+                x = new Number(root[0]);
             else//otherwise store root in y
-                y = root;
+                y = new Number(root[0]);
 
             pd = new pDigit(compNum);
-            Generate();//fill out the opposite root based on the root given
+            Generate(root);//fill out the opposite root based on the root given
         }
 
 
@@ -86,7 +86,7 @@ namespace Pair_Generator
         
 
         //generate the opposite pair to the one we were provided
-        private void Generate()
+        private void Generate(Number root)
         {
             //if we were given x
             if(givenx)
@@ -97,7 +97,10 @@ namespace Pair_Generator
 
                 //proccess each digit starting with the 10's digit
                 for (int i = 1; i < x.Length; i++)
+                {
+                    addDigit(root[i]);
                     proccessDigit(i);
+                }
             }
             else
             {
@@ -107,7 +110,10 @@ namespace Pair_Generator
 
                 //proccess each digit starting with the 10's digit
                 for (int i = 1; i < y.Length; i++)
+                {
+                    addDigit(root[i]);
                     proccessDigit(i);
+                }
             }
         }
 

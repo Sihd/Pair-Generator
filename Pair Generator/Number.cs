@@ -66,6 +66,10 @@ namespace Pair_Generator
             length = num.length;
         }
 
+        //allow construction from an int
+        public Number(int num): this( new BigInteger(num))
+        { }
+
 
         //set up accessors to n
         public BigInteger value
