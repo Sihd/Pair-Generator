@@ -96,7 +96,7 @@ namespace Pair_Generator
                 for (int i = 1; i < root.Length; i++)
                 {
                     addDigit(root[i]);
-                    proccessDigit(i);
+                    //proccessDigit(i);
                 }
         }
 
