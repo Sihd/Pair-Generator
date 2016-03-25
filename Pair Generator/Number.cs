@@ -189,7 +189,7 @@ namespace Pair_Generator
                 throw new ArgumentException("Argument 'index' in setDigit() is negative: " + index);
 
             if (index > (n.ToString().Length - 1))//check if this can be handled by addDigit()
-                addDigit(d, index);//if so call addDigit()
+                addDigit(d);//if so call addDigit()
 
             //get digit at index if index < n.length
             int digit = int.Parse(n.ToString()[d].ToString());
