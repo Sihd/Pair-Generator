@@ -113,7 +113,7 @@ namespace Pair_Generator
                 Number difNum = new Number(compNum - (x.value * y.value));
                 int[] ary = pd.getArray(branch, difNum[indx]);//get array for the amount we need to add
 
-                y.addDigit(x[indx]);//add digit to y at the index in ary associated with the value of the digit in x at position indx
+                y.addDigit(ary[x[indx]]);//add digit to y at the index in ary associated with the value of the digit in x at position indx
 
             }
             else
