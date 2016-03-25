@@ -28,7 +28,31 @@ namespace Pair_Generator
                 y = root;
 
             pd = new pDigit(compNum);
-            Generate();
+            Generate();//fill out the opposite root based on the root given
+        }
+
+
+        //allow read only access to root given
+        public Number mainRoot
+        {
+            get
+            {
+                if (givenx)//if we were given x root
+                    return x;//return x root
+                return y;//if given y root return y root
+            }
+        }
+
+
+        //give read only access to generated root
+        public Number otherRoot
+        {
+            get
+            {
+                if (givenx)//if we were given x root
+                    return y;//return y root
+                return x;//if given y root return x root
+            }
         }
 
         //figure out which root we were given
@@ -62,7 +86,7 @@ namespace Pair_Generator
         
 
         //generate the opposite pair to the one we were provided
-        public void Generate()
+        private void Generate()
         {
             //if we were given x
             if(givenx)
@@ -71,7 +95,19 @@ namespace Pair_Generator
                 if (x.Length == 1)//if we were only given a 1 digit long root then return from Generate()
                     return;//return from Generate()
 
+                //proccess each digit starting with the 10's digit
+                for (int i = 1; i < x.Length; i++)
+                    proccessDigit(i);
+            }
+            else
+            {
+                setOnes();//call setOnes to instantiate x root with correct 1's digit
+                if (y.Length == 1)//if we were only given a 1 digit long root then return from Generate()
+                    return;//return from Generate()
 
+                //proccess each digit starting with the 10's digit
+                for (int i = 1; i < y.Length; i++)
+                    proccessDigit(i);
             }
         }
 
@@ -113,6 +149,31 @@ namespace Pair_Generator
                     }
                 }
             }
+        }
+
+        //Extend the addDigit functionality from the Number struct to the pairGenerator
+        //to enable modifacation of the root being tried while maintaining a read only
+        //state of the opposite root to ensure it remains a valid pair
+        public void addDigit(int d)
+        {
+            if(givenx)//if we are working from the x root
+            {
+                x.addDigit(d);//add new digit to x root
+                proccessDigit(x.Length - 1);//generate digit in y root
+            }
+            else //if we are working from the y root
+            {
+                y.addDigit(d);//add new digit to y root
+                proccessDigit(y.Length - 1);//generate digit in x root
+            }
+        }
+
+        //extend removeDigit functionality from Number struct
+        //to maintain read only status of opposite root generated
+        public void removeDigit()
+        {
+            x.removeDigit();
+            y.removeDigit();
         }
 
 

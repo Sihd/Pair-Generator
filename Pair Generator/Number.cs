@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Pair_Generator
 {
-    public class Number
+    public struct Number
     {
         private BigInteger n;//main variable storage
         private static BigInteger[] digits;//array to store 10^n+1 where n is the index in the array
@@ -22,7 +22,7 @@ namespace Pair_Generator
 
             //fill array with 10^n for easy and fast calculations on n, such as removing the 7 in 7543 would be 7543 % digits[2] or 7543 % 1000 = 543
             //or adding a digit to the main variable n, such as: adding 7000 to 543 would be 543 + digits[2] = 543 + 7000 = 7543
-            for(int i = 0; i < defaultsize; i++)//loop through digits[]
+            for (int i = 0; i < defaultsize; i++)//loop through digits[]
             {
                 digits[i] = temp;//assign current value of temp to current index in digits[]
                 temp *= 10;
@@ -36,15 +36,15 @@ namespace Pair_Generator
 
         }
 
-        public Number()
-        {
-            n = 0;
-        }
+        //public Number()
+        //{
+        //    n = 0;
+        //}
 
         //constructor for Number when given a value of type BigInt
         public Number(BigInteger num)
         {
-            if(num.ToString().Length > (digits.Length + 1))
+            if (num.ToString().Length > (digits.Length + 1))
                 increaseDigits(num.ToString().Length);
             n = num;
             length = num.ToString().Length;
@@ -56,28 +56,32 @@ namespace Pair_Generator
                 throw new ArgumentException("Tried storing non-numeric value in Number");//if unsuccessful throw error message
             if (num.Length > (digits.Length + 1))//check if digits array is long enough to handle working with this value
                 increaseDigits(num.Length);//if not call increaseDigits to fix it
+            length = num.Length;
         }
 
         public Number(Number num)
         {
             //n = num.n;
-            n = new BigInteger(num.n.ToByteArray());
+            n = num.n;
+            length = num.length;
         }
 
-        
+
         //set up accessors to n
         public BigInteger value
         {
             get { return n; }//return n
-            set {
+            set
+            {
                 if (value >= 0)//verify n is greater than or equal to zero
                     n = value;//if so set n to value
             }
         }
 
         public int Length
-        { get
-            { return length;}
+        {
+            get
+            { return length; }
         }
 
         //return requested value at digit i
@@ -106,7 +110,7 @@ namespace Pair_Generator
             for (int i = 0; i < digits.Length; i++)//loop through digits array
                 temp[i] = digits[i];//store value at current index in digits into current index in temp
 
-            for(int i = digits.Length - 1; i < length; i++)//loop through remaining indexes in temp
+            for (int i = digits.Length - 1; i < length; i++)//loop through remaining indexes in temp
             {
                 temp[i] = tempValue;//assign current value of tempValue to current index in temp
                 tempValue *= 10;//generate next value for the next index
@@ -120,7 +124,7 @@ namespace Pair_Generator
         //add (d * 10^(index + 1)) to value stored
         public void addDigit(int d)
         {
-            if(d > 10 || d < 0)
+            if (d > 10 || d < 0)
             {
                 throw new ArgumentException("Digit being added to Number is too big or is negative: " + d);
             }
@@ -141,7 +145,7 @@ namespace Pair_Generator
             //and post-increment length to maintain correct measurement of digits without messing up proper assignment of index
             int index = length++ - 1;
 
-            if(index <= 0)//if adding to 1's digit just set n to d and return
+            if (index <= 0)//if adding to 1's digit just set n to d and return
             {
                 n = d;
                 return;
@@ -163,7 +167,7 @@ namespace Pair_Generator
             //digit[2] == 1,000. 4 - 2 = 2. So (length - 2) will give us the correct index
 
 
-            if(length <= 1)//verify that we are not trying to remove a digit smaller than the 10's digit
+            if (length <= 1)//verify that we are not trying to remove a digit smaller than the 10's digit
             {
                 n = 0;//if we are then just set n to 0
                 length = 0;//reset length counter
@@ -174,8 +178,8 @@ namespace Pair_Generator
             n = n % digits[length - 2];
             length--;//decrement length counter
         }
-         
-        
+
+
         //set digit at index to d   
         public void setDigit(int d, int index)
         {
@@ -230,4 +234,5 @@ namespace Pair_Generator
 
             return temp;//return resulting string
         }
+    }
 }
