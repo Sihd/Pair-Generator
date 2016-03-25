@@ -96,7 +96,7 @@ namespace Pair_Generator
                     return;//return from Generate()
 
                 //proccess each digit starting with the 10's digit
-                for (int i = 1; i < x.Length; i++)
+                for (int i = 1; i < root.Length; i++)
                 {
                     addDigit(root[i]);
                     proccessDigit(i);
@@ -109,7 +109,7 @@ namespace Pair_Generator
                     return;//return from Generate()
 
                 //proccess each digit starting with the 10's digit
-                for (int i = 1; i < y.Length; i++)
+                for (int i = 1; i < root.Length; i++)
                 {
                     addDigit(root[i]);
                     proccessDigit(i);
